@@ -51,7 +51,7 @@
          //always subscribe to ready event and implement widget related code
          //inside callback function , it is the best practice while developing widgets
          JFCustomWidget.subscribe("ready", function(){
-             var title = JFCustomWidget.getWidgetSetting('title');
+             var title = JFCustomWidget.getWidgetSetting('FormTitle');
              document.getElementById('title').textContent = title;
 
              var nameLabel = JFCustomWidget.getWidgetSetting('NameLabel');

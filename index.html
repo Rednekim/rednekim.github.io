@@ -1,35 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document2</title>
-    <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
-</head>
-<body>
-    <div id="main">
-        <h3>This is my first ssasdwidget.</h3>
-        <span id="labelText"></span>
-        <input type="text" id="userInput">
-    </div>
-    <script type="text/javascript">
-        //always subscribe to ready event and implement widget related code
-        //inside callback function , it is the best practice while developing widgets
-        JFCustomWidget.subscribe("ready", function(){
-            var label = JFCustomWidget.getWidgetSetting('QuestionLabel');
-            document.getElementById('labelText').innerHTML = label;
-            //subscribe to form submit event
-            JFCustomWidget.subscribe("submit", function(){
-                var msg = {
-                    //you should valid attribute to data for JotForm
-                    //to be able to use youw widget as required
-                    valid: true,
-                    value: document.getElementById('userInput').value
-                }
-                // send value to JotForm
-                JFCustomWidget.sendSubmit(msg);
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Component</title>
+      <script type="text/javascript">
+         (function() {
+           var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+           po.src = '//js.jotform.com/JotFormCustomWidget.min.js?onload=onLoadCallback';
+           var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+         })();
+      </script>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@swisspost/design-system-styles@next/post-external.css"/>
+   </head>
+   <body>
+      <main class="container">
+         <h3 id="title" class="mb-[2rem]"></h3>
+         <section class="py-[3rem] border-y-2 border-y-[#050400]">
+            <div class="row mb-[1rem]">
+               <div class="col">
+                  <div class="form-floating">
+                     <input type="text" id="name" class="form-control" placeholder=" " />
+                     <label class="form-label" id="name-label" for="name"></label>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col">
+                  <div class="form-floating"> 
+                     <textarea
+                        id="textarea"
+                        type="text"
+                        class="form-control"
+                        placeholder=" "
+                        required=""
+                        ></textarea>
+                     <label class="form-label" id="textarea-label" for="textarea"></label>
+                  </div>
+               </div>
+            </div>
+         </section>
+         <footer class="py-[2rem] flex justify-end">
+            <button id="submit-btn" type="submit" class="btn btn-primary btn-animated" data-component="button" data-content="" aria-live="polite">
+            <span id="submit-btn-label"></span>
+            </button>
+         </footer>
+      </main>
+      <script type="text/javascript">
+         //always subscribe to ready event and implement widget related code
+         //inside callback function , it is the best practice while developing widgets
+         JFCustomWidget.subscribe("ready", function(){
+             var title = JFCustomWidget.getWidgetSetting('title');
+             document.getElementById('title').textContent = title;
+
+             var nameLabel = JFCustomWidget.getWidgetSetting('NameLabel');
+             document.getElementById('name-label').innerHTML = nameLabel;
+         
+             var textAreaLabel = JFCustomWidget.getWidgetSetting('TextAreaLabel');
+             document.getElementById('textarea-label').innerHTML = textAreaLabel;
+         
+             var submitButtonLabel = JFCustomWidget.getWidgetSetting('SubmitButtonLabel');
+             document.getElementById('submit-btn-label').textContent = submitButtonLabel;
+             //subscribe to form submit event
+             JFCustomWidget.subscribe("submit", function(){
+               var formData = {
+                  name: document.getElementById('name').value,
+                  textarea: document.getElementById('textarea').value
+               };
+               var msg = {
+                  //you should valid attribute to data for JotForm
+                  //to be able to use youw widget as required
+                  valid: true,
+                  value: JSON.stringify(formData)
+               }
+               // send value to JotForm
+               JFCustomWidget.sendSubmit(msg);
             });
-        });
-    </script>
-    </body>
+         });
+      </script>
+   </body>
 </html>

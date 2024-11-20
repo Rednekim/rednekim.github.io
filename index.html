@@ -52,12 +52,13 @@
          //inside callback function , it is the best practice while developing widgets
          JFCustomWidget.subscribe("ready", function(){
             console.log('🚀 ~ widget settings:', JFCustomWidget);
-            console.log('🚀 ~ widget settings:', JFCustomWidget.getIframeWindow());
             console.log('🚀 ~ parent settings', parent);
             console.log('🚀 ~ parent document', parent.document);
             console.log('🚀 ~ parent document element', parent.document.documentElement);
             console.log('🚀 ~ parent document elemenet lang', window.parent.document.documentElement.lang);
             console.log('🚀 ~ parent form', parent.document.querySelector('form'));
+             var widgets = JFCustomWidget.getWidgetSettings();
+             console.log('widgetsettings', widgets)
              var title = JFCustomWidget.getWidgetSetting('Nome');
              document.getElementById('title').textContent = title;
 

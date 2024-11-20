@@ -50,17 +50,22 @@
       <script type="text/javascript">
          //always subscribe to ready event and implement widget related code
          //inside callback function , it is the best practice while developing widgets
+         let language = null;
          JFCustomWidget.subscribe("ready", function(){
             // Inside the iframe
-window.parent.postMessage('getLang', '*'); // Send a message to the parent
-
-window.addEventListener('message', (event) => {
-    // Log the response if any listeners in the parent page respond
-    console.log('Received message from parent:', event.data);
-});
+            
+         requestParentLang()
+         .then(lang => {
+         console.log('Parent page lang:', lang);
+         language = lang;
+         })
+         .catch(error => {
+         console.error('Failed to get parent lang:', error);
+         });
+         
              var title = JFCustomWidget.getWidgetSetting('Nome');
              document.getElementById('title').textContent = title;
-
+         
              var nameLabel = JFCustomWidget.getWidgetSetting('NameLabel');
              document.getElementById('name-label').innerHTML = nameLabel;
          
@@ -85,6 +90,31 @@ window.addEventListener('message', (event) => {
                JFCustomWidget.sendSubmit(msg);
             });
          });
+         
+         function requestParentLang() {
+         return new Promise((resolve, reject) => {
+         // Function to handle the message event
+         function handleMessage(event) {
+         // You might want to check event.origin here if you know the parent's origin
+         if (event.data && event.data.type === 'LANG_INFO') {
+         window.removeEventListener('message', handleMessage);
+         resolve(event.data.lang);
+         }
+         }
+         
+         // Add event listener for potential response
+         window.addEventListener('message', handleMessage);
+         
+         // Send message to parent
+         window.parent.postMessage({ type: 'REQUEST_LANG' }, '*');
+         
+         // Set a timeout in case the parent doesn't respond
+         setTimeout(() => {
+         window.removeEventListener('message', handleMessage);
+         reject(new Error('Parent did not respond with lang info'));
+         }, 5000); // 5 second timeout
+         });
+         }
       </script>
    </body>
 </html>

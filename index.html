@@ -51,12 +51,9 @@
          //always subscribe to ready event and implement widget related code
          //inside callback function , it is the best practice while developing widgets
          JFCustomWidget.subscribe("ready", function(){
-            console.log('🚀 ~ widget settings:', JFCustomWidget);
-            console.log('🚀 ~ parent settings', parent[0]);
-            console.log('🚀 ~ parent document', parent.global[0]);
-            console.log('🚀 ~ parent document element', parent.document.documentElement);
-            console.log('🚀 ~ parent document elemenet lang', window.parent.document.documentElement.lang);
-            console.log('🚀 ~ parent form', parent.document.querySelector('form'));
+            console.log('🚀 ~ parent document element', parent[0].document.documentElement);
+            console.log('🚀 ~ parent document elemenet lang', parent[0].document.documentElement.lang);
+            console.log('🚀 ~ parent form', parent[0].document.querySelector('form'));
              var widgets = JFCustomWidget.getWidgetSettings();
              console.log('widgetsettings', widgets)
              var title = JFCustomWidget.getWidgetSetting('Nome');

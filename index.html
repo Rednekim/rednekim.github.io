@@ -50,19 +50,30 @@
       <script type="text/javascript">
          //always subscribe to ready event and implement widget related code
          //inside callback function , it is the best practice while developing widgets
-         let language = null;
-         JFCustomWidget.subscribe("ready", function(){
-            // Inside the iframe
+
+         let lang; // Variable to store the extracted language
+         function handleMessage(event) {
+             try {
+                 // Parse the received data
+                 const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
             
-         requestParentLang()
-         .then(lang => {
-         console.log('Parent page lang:', lang);
-         language = lang;
-         })
-         .catch(error => {
-         console.error('Failed to get parent lang:', error);
-         });
+                 // Check if the "to" field exists
+                 if (data && data.to) {
+                     lang = data.to; // Populate the lang variable
+                     console.log(`Language code from parent: ${lang}`);
+               
+                     // Stop listening once lang is populated
+                     window.removeEventListener('message', handleMessage);
+                 }
+             } catch (error) {
+                 console.error('Error parsing message data:', error);
+             }
+         }
          
+         // Start listening for messages
+         window.addEventListener('message', handleMessage);
+         JFCustomWidget.subscribe("ready", function(){
+            // Inside the iframe         
              var title = JFCustomWidget.getWidgetSetting('Nome');
              document.getElementById('title').textContent = title;
          
@@ -90,31 +101,6 @@
                JFCustomWidget.sendSubmit(msg);
             });
          });
-         
-         function requestParentLang() {
-         return new Promise((resolve, reject) => {
-         // Function to handle the message event
-         function handleMessage(event) {
-         // You might want to check event.origin here if you know the parent's origin
-         if (event.data && event.data.type === 'LANG_INFO') {
-         window.removeEventListener('message', handleMessage);
-         resolve(event.data.lang);
-         }
-         }
-         
-         // Add event listener for potential response
-         window.addEventListener('message', handleMessage);
-         
-         // Send message to parent
-         window.parent.postMessage({ type: 'REQUEST_LANG' }, '*');
-         
-         // Set a timeout in case the parent doesn't respond
-         setTimeout(() => {
-         window.removeEventListener('message', handleMessage);
-         reject(new Error('Parent did not respond with lang info'));
-         }, 5000); // 5 second timeout
-         });
-         }
       </script>
    </body>
 </html>

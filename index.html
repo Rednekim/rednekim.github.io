@@ -51,15 +51,13 @@
          //always subscribe to ready event and implement widget related code
          //inside callback function , it is the best practice while developing widgets
          JFCustomWidget.subscribe("ready", function(){
-            console.log('🚀 ~ parent document element', parent[0].document.documentElement);
-            console.log('🚀 ~ parent document elemenet lang', parent[0].document.documentElement.lang);
-            console.log('🚀 ~ parent form', parent[0].document.querySelector('form'));
-            try {
-    const parentLang = window.parent.document.documentElement.lang;
-    console.log(`Parent page language is: ${parentLang}`);
-} catch (error) {
-    console.error("Access to parent DOM is blocked due to cross-origin policy:", error);
-}
+            // Inside the iframe
+window.parent.postMessage('getLang', '*'); // Send a message to the parent
+
+window.addEventListener('message', (event) => {
+    // Log the response if any listeners in the parent page respond
+    console.log('Received message from parent:', event.data);
+});
              var title = JFCustomWidget.getWidgetSetting('Nome');
              document.getElementById('title').textContent = title;
 

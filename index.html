@@ -54,8 +54,12 @@
             console.log('🚀 ~ parent document element', parent[0].document.documentElement);
             console.log('🚀 ~ parent document elemenet lang', parent[0].document.documentElement.lang);
             console.log('🚀 ~ parent form', parent[0].document.querySelector('form'));
-             var widgets = JFCustomWidget.getWidgetSettings();
-             console.log('widgetsettings', widgets)
+            try {
+    const parentLang = window.parent.document.documentElement.lang;
+    console.log(`Parent page language is: ${parentLang}`);
+} catch (error) {
+    console.error("Access to parent DOM is blocked due to cross-origin policy:", error);
+}
              var title = JFCustomWidget.getWidgetSetting('Nome');
              document.getElementById('title').textContent = title;
 

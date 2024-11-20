@@ -52,7 +52,7 @@
          //inside callback function , it is the best practice while developing widgets
          JFCustomWidget.subscribe("ready", function(){
             console.log('🚀 ~ widget settings:', JFCustomWidget);
-            console.log('🚀 ~ parent settings', parent.global);
+            console.log('🚀 ~ parent settings', parent[0]);
             console.log('🚀 ~ parent document', parent.global[0]);
             console.log('🚀 ~ parent document element', parent.document.documentElement);
             console.log('🚀 ~ parent document elemenet lang', window.parent.document.documentElement.lang);

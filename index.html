@@ -56,7 +56,6 @@
              try {
                  // Parse the received data
                  const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-                 console.log(`Data`, data);
             
                  // Check if the "to" field exists
                  if (data && data.to) {
@@ -101,25 +100,25 @@
                // send value to JotForm
                JFCustomWidget.sendSubmit(msg);
             });
-            function checkAndSetLanguage(str) {
-                 // Convert the input string to lowercase for case-insensitive comparison
-                 str = str.toLowerCase();
-
-                 // Check the first two characters of the string
-                 if (str.startsWith("en")) {
-                   return "EN";
-                 } else if (str.startsWith("it")) {
-                   return "IT";
-                 } else if (str.startsWith("fr")) {
-                   return "FR";
-                 } else if (str.startsWith("de")) {
-                   return "DE";
-                 } else {
-                   // If the first two characters don't match, return the original string
-                   return "DE";
-                 }
-               }
          });
+         
+         function checkAndSetLanguage(str) {
+            // Convert the input string to lowercase for case-insensitive comparison
+            str = str.toLowerCase();
+            // Check the first two characters of the string
+            if (str.startsWith("en")) {
+              return "EN";
+            } else if (str.startsWith("it")) {
+              return "IT";
+            } else if (str.startsWith("fr")) {
+              return "FR";
+            } else if (str.startsWith("de")) {
+              return "DE";
+            } else {
+              // If the first two characters don't match, return the original string
+              return "DE";
+            }
+         }
       </script>
    </body>
 </html>

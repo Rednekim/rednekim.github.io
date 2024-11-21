@@ -65,13 +65,19 @@
                         console.log(`Language code from parent: ${lang}`);
                   
                         // Stop listening once lang is populated
-                        window.removeEventListener('message', handleMessage);
+                        // window.removeEventListener('message', handleMessage);
                     }
                 } catch (error) {
                     console.error('Error parsing message data:', error);
                 }
             }
 
+            console.log('🚀 ~ parent document element', parent[0].document.documentElement);
+            console.log('🚀 ~ parent document elemenet lang', parent[0].document.documentElement.lang);
+            console.log('🚀 ~ parent form', parent[0].document.querySelector('form'));
+            
+            console.log('🚀 ~ window??? document element', window.parent[0].document.documentElement);
+            console.log('🚀 ~ window??? parent', window.parent[0].parent);
             // Start listening for messages
             window.addEventListener('message', handleMessage);
             console.log("Widget", JFCustomWidget);

@@ -13,6 +13,18 @@
       </script>
       <script src="https://cdn.tailwindcss.com"></script>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@swisspost/design-system-styles@next/post-external.css"/>
+      <style>
+         body {
+             background-color: #fff;
+             color: #000;
+             font-family: 'Frutiger Neue for Post',system-ui,sans-serif;
+             font-size: .9375rem;
+             font-weight: 400;
+             line-height: 1.2;
+             margin: 0;
+             text-align: left
+         }
+      </style>
    </head>
    <body>
       <main class="container">
@@ -113,8 +125,6 @@
          async function initialize() {
             // Wait for JFCustomWidget to be ready
             await jfReadyPromise;
-            const querx = getIframeWindow();
-            console.log('wind' ,querx);
             JFCustomWidget.requestFrameResize({width: 600, height:450})
             // Now we can safely use JFCustomWidget
             // Wait for the language to be set

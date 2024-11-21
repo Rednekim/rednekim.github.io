@@ -11,13 +11,6 @@
            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
          })();
       </script>
-      <script type="text/javascript">
-         console.log(document);
-         console.log(window.document);
-         console.log(window);
-         console.log(window.document.parentElement);
-         console.log(window.parent);
-      </script>
       <script src="https://cdn.tailwindcss.com"></script>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@swisspost/design-system-styles@next/post-external.css"/>
    </head>
@@ -119,7 +112,9 @@
          async function initialize() {
             // Wait for JFCustomWidget to be ready
             await jfReadyPromise;
-            
+            const sadasd = JFCustomWidgetUtils.getFormDomain();
+            console.log(sadasd);
+            JFCustomWidget.requestFrameResize({width: 600, height:450})
             // Now we can safely use JFCustomWidget
             // Wait for the language to be set
             await setLanguage();

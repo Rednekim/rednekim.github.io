@@ -113,11 +113,7 @@
          async function initialize() {
             // Wait for JFCustomWidget to be ready
             await jfReadyPromise;
-            const sadasd = JFCustomWidget.getParentOrigin();
-            console.log(sadasd);
-            const quer = JFCustomWidget.getAllQueryString();
-            console.log('asdad' ,quer);
-            const querx = JFCustomWidget.getIframeWindow();
+            const querx = getIframeWindow();
             console.log('wind' ,querx);
             JFCustomWidget.requestFrameResize({width: 600, height:450})
             // Now we can safely use JFCustomWidget

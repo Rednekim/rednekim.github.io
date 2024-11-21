@@ -51,7 +51,7 @@
          //always subscribe to ready event and implement widget related code
          //inside callback function , it is the best practice while developing widgets
          
-         let lang; // Variable to store the extracted language
+         let lang = 'EN'; // Variable to store the extracted language
          function handleMessage(event) {
              try {
                  // Parse the received data
@@ -72,21 +72,24 @@
          // Start listening for messages
          window.addEventListener('message', handleMessage);
 
-         JFCustomWidget.subscribe("ready", function(){
+         JFCustomWidget.subscribe("ready", function() {
             // Inside the iframe         
-             var title = JFCustomWidget.getWidgetSetting(`TitleLabel${lang}`);
-             document.getElementById('title').textContent = title;
-         
-             var nameLabel = JFCustomWidget.getWidgetSetting(`NameLabel${lang}`);
-             document.getElementById('name-label').innerHTML = nameLabel;
-         
-             var textAreaLabel = JFCustomWidget.getWidgetSetting(`TextAreaLabel${lang}`);
-             document.getElementById('textarea-label').innerHTML = textAreaLabel;
-         
-             var submitButtonLabel = JFCustomWidget.getWidgetSetting(`SubmitButtonLabel${lang}`);
-             document.getElementById('submit-btn-label').textContent = submitButtonLabel;
+            setTimeout(() => {
+               var title = JFCustomWidget.getWidgetSetting(`TitleLabel${lang}`);
+               document.getElementById('title').textContent = title;
+               
+               var nameLabel = JFCustomWidget.getWidgetSetting(`NameLabel${lang}`);
+               document.getElementById('name-label').innerHTML = nameLabel;
+               
+               var textAreaLabel = JFCustomWidget.getWidgetSetting(`TextAreaLabel${lang}`);
+               document.getElementById('textarea-label').innerHTML = textAreaLabel;
+               
+               var submitButtonLabel = JFCustomWidget.getWidgetSetting(`SubmitButtonLabel${lang}`);
+               document.getElementById('submit-btn-label').textContent = submitButtonLabel;
+            }, 500);
+
              //subscribe to form submit event
-             JFCustomWidget.subscribe("submit", function(){
+            JFCustomWidget.subscribe("submit", function(){
                var formData = {
                   name: document.getElementById('name').value,
                   textarea: document.getElementById('textarea').value

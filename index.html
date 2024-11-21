@@ -65,15 +65,17 @@
                         console.log(`Language code from parent: ${lang}`);
                   
                         // Stop listening once lang is populated
-                        window.removeEventListener('message', handleMessage);
+                        // window.removeEventListener('message', handleMessage);
                     }
                 } catch (error) {
                     console.error('Error parsing message data:', error);
                 }
+                console.log("Dataa", data);
             }
-            
+
             // Start listening for messages
             window.addEventListener('message', handleMessage);
+            console.log("Widget", JFCustomWidget);
             // Inside the iframe         
              var title = JFCustomWidget.getWidgetSetting('TitleLabel');
              document.getElementById('title').textContent = title;

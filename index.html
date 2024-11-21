@@ -52,6 +52,7 @@
          //inside callback function , it is the best practice while developing widgets
          let lang = 'EN';
          let jfReadyPromise;
+         window.addEventListener('settings', (event) => console.log("settingsss", event));
                
          // Create a promise that resolves when JFCustomWidget is ready
          jfReadyPromise = new Promise((resolve) => {
@@ -90,7 +91,6 @@
                      }
                  }
                  window.addEventListener('message', handleMessage);
-                 window.addEventListener('settings', (event) => console.log("settingsss", event));
              });
          }
          

@@ -57,7 +57,7 @@
                 try {
                     // Parse the received data
                     const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-                    console.log(`Data: ${data}`);
+                    console.log(`Data`, data);
                
                     // Check if the "to" field exists
                     if (data && data.to) {
@@ -65,12 +65,11 @@
                         console.log(`Language code from parent: ${lang}`);
                   
                         // Stop listening once lang is populated
-                        // window.removeEventListener('message', handleMessage);
+                        window.removeEventListener('message', handleMessage);
                     }
                 } catch (error) {
                     console.error('Error parsing message data:', error);
                 }
-                console.log("Dataa", data);
             }
 
             // Start listening for messages

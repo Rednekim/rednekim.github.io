@@ -50,31 +50,31 @@
       <script type="text/javascript">
          //always subscribe to ready event and implement widget related code
          //inside callback function , it is the best practice while developing widgets
-
-         let lang; // Variable to store the extracted language
-         function handleMessage(event) {
-             try {
-                 // Parse the received data
-                 const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-            
-                 // Check if the "to" field exists
-                 if (data && data.to) {
-                     lang = data.to; // Populate the lang variable
-                     console.log(`Language code from parent: ${lang}`);
-               
-                     // Stop listening once lang is populated
-                     window.removeEventListener('message', handleMessage);
-                 }
-             } catch (error) {
-                 console.error('Error parsing message data:', error);
-             }
-         }
          
-         // Start listening for messages
-         window.addEventListener('message', handleMessage);
          JFCustomWidget.subscribe("ready", function(){
+            let lang; // Variable to store the extracted language
+            function handleMessage(event) {
+                try {
+                    // Parse the received data
+                    const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+               
+                    // Check if the "to" field exists
+                    if (data && data.to) {
+                        lang = data.to; // Populate the lang variable
+                        console.log(`Language code from parent: ${lang}`);
+                  
+                        // Stop listening once lang is populated
+                        window.removeEventListener('message', handleMessage);
+                    }
+                } catch (error) {
+                    console.error('Error parsing message data:', error);
+                }
+            }
+            
+            // Start listening for messages
+            window.addEventListener('message', handleMessage);
             // Inside the iframe         
-             var title = JFCustomWidget.getWidgetSetting('Nome');
+             var title = JFCustomWidget.getWidgetSetting('TitleLabel');
              document.getElementById('title').textContent = title;
          
              var nameLabel = JFCustomWidget.getWidgetSetting('NameLabel');

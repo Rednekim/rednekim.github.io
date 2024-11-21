@@ -50,11 +50,12 @@
       <script type="text/javascript">
          //always subscribe to ready event and implement widget related code
          //inside callback function , it is the best practice while developing widgets
-         
-         let lang = 'EN'; // Variable to store the extracted language// Start listening for messages
-         window.addEventListener('message', handleMessage);
-         
          JFCustomWidget.subscribe("ready", function() {
+            let lang = 'EN'; // Variable to store the extracted language// Start listening for messages
+            window.addEventListener('message', handleMessage);
+
+            console.log('🚀 ~ parent document element', parent[0].document);
+            console.log('🚀 ~ document', document);
             // Inside the iframe         
             var title = JFCustomWidget.getWidgetSetting(`TitleLabel${lang}`);
             document.getElementById('title').textContent = title;
@@ -86,10 +87,11 @@
          });
 
          function submitForm(){
-
+            JFCustomWidget.submit();
          }
          
          function handleMessage(event) {
+            
              try {
                  // Parse the received data
                  const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;

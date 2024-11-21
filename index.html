@@ -57,6 +57,7 @@
                 try {
                     // Parse the received data
                     const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+                    console.log(`Data: ${data}`);
                
                     // Check if the "to" field exists
                     if (data && data.to) {

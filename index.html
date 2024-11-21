@@ -50,88 +50,93 @@
       <script type="text/javascript">
          //always subscribe to ready event and implement widget related code
          //inside callback function , it is the best practice while developing widgets
-         
-         let lang = 'EN'; // Variable to store the extracted language// Start listening for messages
-         window.addEventListener('message', handleMessage);
-         
-         JFCustomWidget.subscribe("ready", async function() {
-            // Inside the iframe
-            await setLanguage();
-
-            populateLabels();
-
-             //subscribe to form submit event
-            JFCustomWidget.subscribe("submit", function(){
-               var formData = {
-                  name: document.getElementById('name').value,
-                  textarea: document.getElementById('textarea').value
-               };
-               var msg = {
-                  //you should valid attribute to data for JotForm
-                  //to be able to use youw widget as required
-                  valid: true,
-                  value: JSON.stringify(formData)
-               }
-               // send value to JotForm
-               JFCustomWidget.sendSubmit(msg);
-            });
-         });
-
-         function submitForm(){
-
-         }
-         function setLanguage() {
-            return new Promise((resolve) => {
-                function handleMessage(event) {
-                    try {
-                        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-                        if (data && data.to) {
-                            lang = checkAndSetLanguage(data.to);
-                            console.log(`Language code from parent: ${lang}`);
-                            
-                            window.removeEventListener('message', handleMessage);
-                            resolve();
-                        }
-                    } catch (error) {
-                        console.error('Error parsing message data:', error);
-                    }
-                }
-                window.addEventListener('message', handleMessage);
-         });
-}
-         
-         function handleMessage(event) {            
-             try {
-                 // Parse the received data
-                 const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-            
-                 // Check if the "to" field exists
-                 if (data && data.to) {
-                     lang = checkAndSetLanguage(data.to); // Populate the lang variable
-                     console.log(`Language code from parent: ${lang}`);
+         let lang = 'EN';
+         let jfReadyPromise;
                
-                     // Stop listening once lang is populated
-                     window.removeEventListener('message', handleMessage);
-                 }
-             } catch (error) {
-                 console.error('Error parsing message data:', error);
+         // Create a promise that resolves when JFCustomWidget is ready
+         jfReadyPromise = new Promise((resolve) => {
+             if (window.JFCustomWidget) {
+                 JFCustomWidget.subscribe("ready", resolve);
+             } else {
+                 // If JFCustomWidget is not available, we'll wait for it
+                 window.addEventListener('load', () => {
+                     if (window.JFCustomWidget) {
+                         JFCustomWidget.subscribe("ready", resolve);
+                     } else {
+                         console.error("JFCustomWidget is not available");
+                     }
+                 });
              }
+         });
+         
+         // Function to set language
+         function setLanguage() {
+             return new Promise((resolve) => {
+                 function handleMessage(event) {
+                     try {
+                         const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+                         if (data && data.to) {
+                             lang = checkAndSetLanguage(data.to);
+                             console.log(`Language code from parent: ${lang}`);
+                             window.removeEventListener('message', handleMessage);
+                             resolve();
+                         }
+                     } catch (error) {
+                         console.error('Error parsing message data:', error);
+                     }
+                 }
+                 window.addEventListener('message', handleMessage);
+             });
          }
-
+         
+         // Function to populate labels
          function populateLabels() {
              const title = JFCustomWidget.getWidgetSetting(`TitleLabel${lang}`);
              document.getElementById('title').textContent = title;
-
+             
              const nameLabel = JFCustomWidget.getWidgetSetting(`NameLabel${lang}`);
              document.getElementById('name-label').innerHTML = nameLabel;
-
+             
              const textAreaLabel = JFCustomWidget.getWidgetSetting(`TextAreaLabel${lang}`);
              document.getElementById('textarea-label').innerHTML = textAreaLabel;
-
+             
              const submitButtonLabel = JFCustomWidget.getWidgetSetting(`SubmitButtonLabel${lang}`);
              document.getElementById('submit-btn-label').textContent = submitButtonLabel;
          }
-                  
+         
+         // Main function to initialize everything
+         async function initialize() {
+             try {
+                 // Wait for JFCustomWidget to be ready
+                 await jfReadyPromise;
+                 
+                 // Now we can safely use JFCustomWidget
+                 // Wait for the language to be set
+                 await setLanguage();
+                 
+                 // Now populate the labels
+                 populateLabels();
+            
+                 // Subscribe to form submit event
+                 JFCustomWidget.subscribe("submit", function(){
+                     const formData = {
+                         name: document.getElementById('name').value,
+                         textarea: document.getElementById('textarea').value
+                     };
+                     const msg = {
+                         valid: true,
+                         value: JSON.stringify(formData)
+                     }
+                     JFCustomWidget.sendSubmit(msg);
+                 });
+             } catch (error) {
+                 console.error("Initialization failed:", error);
+             }
+         }
+         
+         // Start the initialization process
+         initialize();
+    
          function checkAndSetLanguage(str) {
             // Convert the input string to lowercase for case-insensitive comparison
             str = str.toLowerCase();

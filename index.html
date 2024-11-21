@@ -50,24 +50,15 @@
       <script type="text/javascript">
          //always subscribe to ready event and implement widget related code
          //inside callback function , it is the best practice while developing widgets
-         JFCustomWidget.subscribe("ready", function() {
-            let lang = 'EN'; // Variable to store the extracted language// Start listening for messages
-            window.addEventListener('message', handleMessage);
+         
+         let lang = 'EN'; // Variable to store the extracted language// Start listening for messages
+         window.addEventListener('message', handleMessage);
+         
+         JFCustomWidget.subscribe("ready", async function() {
+            // Inside the iframe
+            await setLanguage();
 
-            console.log('🚀 ~ parent document element', parent[0].document);
-            console.log('🚀 ~ document', document);
-            // Inside the iframe         
-            var title = JFCustomWidget.getWidgetSetting(`TitleLabel${lang}`);
-            document.getElementById('title').textContent = title;
-            
-            var nameLabel = JFCustomWidget.getWidgetSetting(`NameLabel${lang}`);
-            document.getElementById('name-label').innerHTML = nameLabel;
-            
-            var textAreaLabel = JFCustomWidget.getWidgetSetting(`TextAreaLabel${lang}`);
-            document.getElementById('textarea-label').innerHTML = textAreaLabel;
-            
-            var submitButtonLabel = JFCustomWidget.getWidgetSetting(`SubmitButtonLabel${lang}`);
-            document.getElementById('submit-btn-label').textContent = submitButtonLabel;
+            populateLabels();
 
              //subscribe to form submit event
             JFCustomWidget.subscribe("submit", function(){
@@ -87,11 +78,29 @@
          });
 
          function submitForm(){
-            JFCustomWidget.submit();
+
          }
+         function setLanguage() {
+            return new Promise((resolve) => {
+                function handleMessage(event) {
+                    try {
+                        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+                        if (data && data.to) {
+                            lang = checkAndSetLanguage(data.to);
+                            console.log(`Language code from parent: ${lang}`);
+                            
+                            window.removeEventListener('message', handleMessage);
+                            resolve();
+                        }
+                    } catch (error) {
+                        console.error('Error parsing message data:', error);
+                    }
+                }
+                window.addEventListener('message', handleMessage);
+         });
+}
          
-         function handleMessage(event) {
-            
+         function handleMessage(event) {            
              try {
                  // Parse the received data
                  const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
@@ -107,6 +116,20 @@
              } catch (error) {
                  console.error('Error parsing message data:', error);
              }
+         }
+
+         function populateLabels() {
+             const title = JFCustomWidget.getWidgetSetting(`TitleLabel${lang}`);
+             document.getElementById('title').textContent = title;
+
+             const nameLabel = JFCustomWidget.getWidgetSetting(`NameLabel${lang}`);
+             document.getElementById('name-label').innerHTML = nameLabel;
+
+             const textAreaLabel = JFCustomWidget.getWidgetSetting(`TextAreaLabel${lang}`);
+             document.getElementById('textarea-label').innerHTML = textAreaLabel;
+
+             const submitButtonLabel = JFCustomWidget.getWidgetSetting(`SubmitButtonLabel${lang}`);
+             document.getElementById('submit-btn-label').textContent = submitButtonLabel;
          }
                   
          function checkAndSetLanguage(str) {

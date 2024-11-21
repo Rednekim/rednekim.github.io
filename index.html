@@ -92,9 +92,6 @@
                  window.addEventListener('message', handleMessage);
              });
          }
-         setTimeout(() => {
-            window.addEventListener('message', (evt) => console.log('sdsdfdf', evt));
-         }, 1500);
          
          // Function to populate labels
          function populateLabels() {
@@ -115,7 +112,7 @@
          async function initialize() {
             // Wait for JFCustomWidget to be ready
             await jfReadyPromise;
-            JFCustomWidget.requestFrameResize(500, 400);
+            
             // Now we can safely use JFCustomWidget
             // Wait for the language to be set
             await setLanguage();

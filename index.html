@@ -68,6 +68,10 @@
                  });
              }
          });
+
+         function submitForm(){
+            JFCustomWidget.submit();
+         }
          
          // Function to set language
          function setLanguage() {
@@ -106,36 +110,38 @@
          
          // Main function to initialize everything
          async function initialize() {
-             try {
-                 // Wait for JFCustomWidget to be ready
-                 await jfReadyPromise;
-                 
-                 // Now we can safely use JFCustomWidget
-                 // Wait for the language to be set
-                 await setLanguage();
-                 
-                 // Now populate the labels
-                 populateLabels();
+            // Wait for JFCustomWidget to be ready
+            await jfReadyPromise;
             
-                 // Subscribe to form submit event
-                 JFCustomWidget.subscribe("submit", function(){
-                     const formData = {
-                         name: document.getElementById('name').value,
-                         textarea: document.getElementById('textarea').value
-                     };
-                     const msg = {
-                         valid: true,
-                         value: JSON.stringify(formData)
-                     }
-                     JFCustomWidget.sendSubmit(msg);
-                 });
-             } catch (error) {
-                 console.error("Initialization failed:", error);
-             }
+            // Now we can safely use JFCustomWidget
+            // Wait for the language to be set
+            await setLanguage();
+            
+            // Now populate the labels
+            populateLabels();
+                    // Subscribe to form submit event
+            JFCustomWidget.subscribe("submit", function() {
+               const nameValue = document.getElementById('name').value;
+               const textareaValue = document.getElementById('textarea').value;
+            
+               if( (nameValue && nameValue !== '') && (textareaValue && textareaValue !== '')) {
+                  const formData = {
+                      name: nameValue,
+                      textarea: textareaValue
+                  };
+                  const msg = {
+                      valid: true,
+                      value: JSON.stringify(formData)
+                  }
+                  JFCustomWidget.sendSubmit(msg);
+               } else{                  
+                  const msg = {
+                      valid: false,
+                      value: ''
+                  }
+               }
+            });
          }
-         
-         // Start the initialization process
-         initialize();
     
          function checkAndSetLanguage(str) {
             // Convert the input string to lowercase for case-insensitive comparison
@@ -154,6 +160,9 @@
               return "DE";
             }
          }
+
+         // Start the initialization process
+         await initialize();
       </script>
    </body>
 </html>

@@ -113,8 +113,7 @@
          async function initialize() {
             // Wait for JFCustomWidget to be ready
             await jfReadyPromise;
-            JFCustomWidget.requestFrameResize();
-            JFCustomWidget.requestFrameResize(500,400);
+            JFCustomWidget.requestFrameResize(500, 400);
             // Now we can safely use JFCustomWidget
             // Wait for the language to be set
             await setLanguage();
